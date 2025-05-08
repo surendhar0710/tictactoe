@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <link rel="stylesheet" href="tac.css">
+</head>
+<body>
+  
+  <div>
+    <h1>Tic-Tac-Toe</h1>
+    <div id="board">
+      <div class="cell" id= "cell-0"onclick="box(0)"></div>
+      <div class="cell" id="cell-1" onclick="box(1)"></div>
+      <div class="cell" id="cell-2" onclick="box(2)"></div>
+      <div class="cell" id="cell-3" onclick="box(3)"></div>
+      <div class="cell" id="cell-4" onclick="box(4)"></div>
+      <div class="cell" id="cell-5" onclick="box(5)"></div>
+      <div class="cell" id="cell-6" onclick="box(6)"></div>
+      <div class="cell" id="cell-7" onclick="box(7)"></div>
+      <div class="cell" id="cell-8" onclick="box(8)"></div>
+    </div>
+    <button onclick="resetGame()">Restart Game</button>
+    <p id="status"></p>
+  </div>
+
+  <script>
+    let board = ['', '', '', '', '', '', '', '', ''];  
+    let currentPlayer = 'X'; 
+    let move = 0;
+    let gameStatus = 'ongoing';  
+
+    let Patterns = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6]
+    ];
+
+    // Display the board 
+    function Board() {
+      for (let i = 0; i < board.length; i++) {
+        let cell = document.getElementById('cell-' + i);
+        cell.textContent = board[i] || '';
+        cell.style.backgroundColor = board[i] === 'X'  , board[i] === 'O' ;
+      }
+    }
+
+    //  player move
+    function box(index) {
+      if (gameStatus === 'won' || gameStatus === 'tie') {
+        alert('Game is over. Please restart.');
+        return;
+      }
+
+      if (board[index] !== '') {
+        alert('Cell is already filled.');
+        return;
+      }
+
+
+      board[index] = currentPlayer;
+      move += 1;
+      Board();
+
+      if (check()) {
+        document.getElementById('status').textContent = currentPlayer + ' wins!';
+        gameStatus = 'won';  
+        return;
+      }
+
+      if (move === 9) {
+        document.getElementById('status').textContent = "It's a tie!";
+        gameStatus = 'tie';  
+        return;
+      }
+
+      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';  // Switch players
+      document.getElementById('status').textContent = 'Next turn: ' + currentPlayer;
+    }
+
+    // Check for a winner
+    function check() {
+      for (let i = 0; i < Patterns.length; i++) {
+        let [a, b, c] = Patterns[i];
+        if (board[a] !== '' && board[a] === board[b] && board[a] === board[c]) {
+          return true;  
+          // If a player wins, return 'true'
+        }
+      }
+      return false;  // No winner found
+    }
+
+    // Reset the game
+    function resetGame() {
+      board = ['', '', '', '', '', '', '', '', ''];  // 
+      currentPlayer = 'X';  
+      move = 0;  
+      gameStatus = 'ongoing';  
+      document.getElementById('status').textContent = ''; 
+      Board();  
+    }
+  </script>
+</body>
+</html>
